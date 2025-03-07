@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>З 8 Березня!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(to bottom right, #5b21b6, #7e22ce, #db2777);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      text-align: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 1s ease;
+    }
+
+    .content.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 5rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, #fce7f3, #fef3c7);
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: float 3s ease-in-out infinite;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .message {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .image {
+      width: 100%;
+      border-radius: 0.5rem;
+      transition: transform 0.5s ease;
+    }
+
+    .image:hover {
+      transform: scale(1.05);
+    }
+
+    .flowers {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .flower {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .flower svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+    }
+
+    .flower.pink svg {
+      color: #fbcfe8;
+    }
+
+    .flower.yellow svg {
+      color: #fef3c7;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .flower-click {
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(2); opacity: 0.5; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 3rem;
+      }
+      .message {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="flowers" id="flowers"></div>
+  <div class="container">
+    <div class="content" id="content">
+      <h1 class="title">З 8 Березня!</h1>
+      <div class="card" id="card">
+        <p class="message" id="message"></p>
+        <img class="image" id="image" alt="Spring flowers">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const messages = [
+      "Вітаю зі святом весни!",
+      "Бажаю натхнення та успіхів у всіх починаннях!",
+      "Нехай кожен день дарує нові можливості!",
+      "Щастя, здоров'я та гарного настрою!"
+    ];
+
+    const images = [
+      "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800",
+      "https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?auto=format&fit=crop&w=800",
+      "https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&w=800",
+      "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800"
+    ];
+
+    let currentIndex = 0;
+
+    function updateContent() {
+      document.getElementById('message').textContent = messages[currentIndex];
+      document.getElementById('image').src = images[currentIndex];
+      currentIndex = (currentIndex + 1) % messages.length;
+    }
+
+    function createFlowers() {
+      const flowersContainer = document.getElementById('flowers');
+      for (let i = 0; i < 20; i++) {
+        const flower = document.createElement('div');
+        flower.className = `flower flower-${i + 1} ${i % 2 === 0 ? 'pink' : 'yellow'}`;
+        flower.style.left = `${Math.random() * 100}%`;
+        flower.style.top = `${Math.random() * 100}%`;
+        flower.style.animationDelay = `${Math.random() * 5}s`;
+        
+        flower.innerHTML = i % 2 === 0 
+          ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 7.5a4.5 4.5 0 1 1 4.5 4.5M12 7.5A4.5 4.5 0 1 0 7.5 12M12 7.5V9M7.5 12H9m7.5 0a4.5 4.5 0 1 1-4.5 4.5M16.5 12H15m-3 4.5V15m0 1.5a4.5 4.5 0 1 1-4.5-4.5m4.5 8.5v-1.5m0-15v1.5"/></svg>'
+          : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4m14-4v4M3 5h4m14 0h-4m-8 14v4m10-4v4m-14-2h4m14 0h-4"/></svg>';
+        
+        flower.onclick = function() {
+          this.classList.add('flower-click');
+          setTimeout(() => this.classList.remove('flower-click'), 1000);
+        };
+        
+        flowersContainer.appendChild(flower);
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      createFlowers();
+      updateContent();
+      setTimeout(() => {
+        document.getElementById('content').classList.add('show');
+      }, 1000);
+    });
+
+    // Change message and image on card click
+    document.getElementById('card').addEventListener('click', updateContent);
+  </script>
+</body>
+</html>
